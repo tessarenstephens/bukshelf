@@ -1,17 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import Logo from "./Logo.js";
+
 
 const NavBar = () => {
     return (
-        <Logo>NavBar</Logo>
+        <NavBarContainer>
+        <Logo />
+        </NavBarContainer>
     )
 };
 
-const Logo = styled.div`
-    display: flex;
-    flex-direction: column;
-    
+const NavBarContainer = styled.div`
+    margin: 10%;
+    width: 50%;
 `;
+
 
 
 export default NavBar;

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyle from "./GlobalStyles";
-import HomePage from "./HomePage";
+import Home from "./Pages/Home";
 import NavBar from "./NavBar.js";
 
 const App = () => {
@@ -11,10 +11,13 @@ const App = () => {
         <BrowserRouter>
             <GlobalStyle />
             <Container>
-            {window.scrollTo(0,0)}
                 <NavBar />
                 <Routes>
-                    <Route to="/" element={<HomePage />}/>
+                    {/* <Route to="/" element={<Home />}/> */}
+                    {/* <Route to="/sign-up" element={<CreateProfile />}/> */}
+                    {/* <Route to="/sign-in" element={<SignIn />}/> */}
+                    {/* <Route to="/my-dashboard" element={<Dashboard />}/> */}
+                        {/* add routes within dashboard? */}
 
                 </Routes>
             </Container>
@@ -27,7 +30,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 100vw;
+    width: 100vw;
     min-height: fit-content;
     background-color: var(-paper);
 `;
