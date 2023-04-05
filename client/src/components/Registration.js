@@ -6,7 +6,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import logoB from '../assets/bukshelf-logo.png';
 import buksIcon from '../assets/buks-noline.png';
 import Spectacles from './SpecticlesIcon';
-import Loading from './LoadingState';
+
 
 const Registration = () => {
     const navigate = useNavigate();
