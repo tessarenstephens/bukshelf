@@ -1,17 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
+import Logo from "./Logo.js";
+import Spectacles from "./SpecticlesIcon.js";
+
 
 const NavBar = () => {
     return (
-        <Logo>NavBar</Logo>
+        <NavBarContainer>
+            <Element path='/'><Logo /></Element>
+            <Element path='/'><Spectacles /></Element>
+        </NavBarContainer>
     )
 };
 
-const Logo = styled.div`
+const NavBarContainer = styled.div`
     display: flex;
-    flex-direction: column;
-    
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    width: 100%;
+    min-width: 300px;
+    height: 90px;
 `;
 
+const Element = styled(NavLink)`
+    padding: 25px 40px;
+    cursor: pointer;
+    /* &:hover {
+        scale: 1.1;
+    } */
+`;
 
 export default NavBar;
