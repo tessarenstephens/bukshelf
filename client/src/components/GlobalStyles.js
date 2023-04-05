@@ -2,10 +2,8 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 :root {
-    -font-heading: 'Helvetica', Arial, Helvetica, sans-serif;
-    -font-body: 'Helvetica', Arial, Helvetica, sans-serif;
-    -dark-blue: #000a14;
-    -paper: #f4f0e8;
+    --helvetica: 'Helvetica', Arial, Helvetica, sans-serif;
+    --paper: #f4f0e8; 
 }
 
 /* http://meyerweb.com/eric/tools/css/reset/
@@ -32,8 +30,9 @@ time, mark, audio, video {
     box-sizing: border-box;
     font-size: 100%;
     vertical-align: baseline;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--helvetica);
     color: #16120a;
+    letter-spacing: 1pt;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -55,31 +54,19 @@ q:before, q:after {
     content: none;
 }
 
-h1 {
-
-}
-
-h2 {
-
-}
-
-h3,
-label,
 button {
-
+    color: var(--paper);
+    background-color: #000000;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1pt;
+    font-size: 16px;
 }
 
-p,
-a,
-li,
-blockquote,
-input {
 
-}
-
-input {
-
-}
 
 `;
 
