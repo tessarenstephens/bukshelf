@@ -64,10 +64,30 @@ button {
     font-weight: bold;
     letter-spacing: 1pt;
     font-size: 16px;
+    padding: 15px;
 }
 
+input {
+    border: 2px solid var(--paper);
+    border-radius: 9px;
+    &:focus {
+        outline: none;
+        border: 2px solid black;
+    }
+    &:active {
+        outline: none;
+        border: 2px solid black;
+    }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+    }
+input[data-autocompleted] {
+    background-color: transparent;
+    }
 
 
 `;
-
-    export default GlobalStyle;
+export default GlobalStyle;

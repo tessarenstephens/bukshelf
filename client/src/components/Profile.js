@@ -1,53 +1,71 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from'styled-components';
 import { useAuth0 } from '@auth0/auth0-react';
-
+import { UserContext } from './UserContext';
+import Catalogue from './Catalogue';
+import profileIcon from '../assets/spectacles-icon.png';
+import LoadingState from './LoadingState';
 
 const Profile = () => {
     const {user, isAuthenticated} = useAuth0();
-
-    // GOOGLE SIGN IN OBJECT = 
-    // given_name: Tessa Ren
-    // family_name: Stephens
-    // nickname: tessarenstephens
-    // name: Tessa Ren Stephens
-    // picture: https://lh3.googleusercontent.com/a/AGNmyxYCG0Xxl7zLBcfl9tTgkEgiNS2CGuqrWtJcWMXJHQ=s96-c
-    // locale: en
-    // updated_at: 2023-04-04T18:02:48.308Z
-    // email: tessarenstephens@gmail.com
-    // email_verified:
-    // sub: google-oauth2|117867826610911657557
+    const {loggedInUser, setLoggedInUser} = useContext(UserContext);
 
     return (
-        isAuthenticated && (
+        
+        <UserContext.Provider value={loggedInUser}>
+        <Container>
+        {!loggedInUser.fullName && !isAuthenticated && <LoadingState />} 
+
+        {loggedInUser && isAuthenticated && (
             <>
-            <Container>
-                <Hey>Hey, búkkeeper!</Hey>
-                {user?.picture && <ProfileImg src={user.picture} alt={user?.name} />}
-                <h3>{user.given_name}</h3>
-            </Container>
+                <ProfileDiv>
+                    <ProfileImage src={profileIcon} alt="profile icon"/>
+                    <Hey>Hey, búkkeeper! {loggedInUser.fullName}</Hey>
+                    <Hey>{loggedInUser.email}</Hey>
+                </ProfileDiv>
+
+                <DashboardDiv>
+                    <Catalogue/>
+                </DashboardDiv>
+                
             </>
-        )
+        )}
+        </Container>
+        </UserContext.Provider>
     )
 }
 
 const Container = styled.div`
-    width: 80%;
+    width: 100%;
+    height: 700px;
+    background-color: var(--paper);
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     padding: 50px;
+`;
+
+const DashboardDiv = styled.div`
+    display: flex;
+    flex-direction: column;
 `;
 
 const Hey = styled.h1`
     margin: 15px;
 `;
 
-const ProfileImg = styled.img`
+const ProfileDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-radius: 50%;
     padding: 10px;
 `;
 
-
+const ProfileImage = styled.img`
+    width: 200px;
+    height: 200px;
+`;
 
 export default Profile;
