@@ -6,9 +6,10 @@ export const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
 
-    const [loggedInUser, setLoggedInUser] = useState({});
     const { user, isAuthenticated } = useAuth0();
+    const [loggedInUser, setLoggedInUser] = useState(null);
 
+    // match Auth0 email to mongo email to set loggedInUser
     useEffect(() => {
         if (isAuthenticated) {
             fetch (`/api/bukkeeper/${user.email}`)

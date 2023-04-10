@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
+import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import LoginSignup from "./LoginSignup";
 import LogoutButton from './LogoutButton';
-import { useAuth0 } from "@auth0/auth0-react";
-import { useNavigate } from "react-router-dom";
+import LoadingState from './LoadingState';
 import bookShelf from '../assets/bookShelf.jpg';
+import { UserContext } from './UserContext';
 
 // LANDING PAGE STATES: LOGIN/SIGN UP / LOGOUT
 
 const Landing = () => {
     const navigate = useNavigate();
     const { user, isAuthenticated } = useAuth0();
+    const { loggedInUser } = useContext(UserContext);
 
     // if user is NOT in mongoDB, redirect to REGISTRATION
     useEffect(() => {
@@ -19,30 +22,26 @@ const Landing = () => {
         .then(response => response.json())
         .then(data => {
             if (data.inDB === false) {
+                console.log("DATA INDB:", data)
                 navigate('/register');
             } else {
-                navigate('/profile');
+                navigate('/');
             }
         })
         .catch(error => console.log("LANDING GET ERROR:", error))
         }
     }, [user])
 
-console.log("LANDING AUTHENTICATED:", isAuthenticated);
-console.log("LANDING USER:", user);
-
+    
 
     return (
         <Container>
-            {!isAuthenticated ? (
-                <>
-                    <LoginSignup />
-                </>
-            ) : (
-                <>
-                    <LogoutButton />
-                </>
-            )}
+            { !isAuthenticated && <LoginSignup /> }
+
+            { isAuthenticated && !loggedInUser && <LoadingState/>}
+
+            { isAuthenticated && loggedInUser && <LogoutButton /> }
+
             <Div src={`${bookShelf}`}/>
         </Container>
     )

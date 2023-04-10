@@ -32,11 +32,11 @@ const app = express()
 // -CHECK for existing bukkeeper
     app.get("/api/bukkeeper/verify", verifyBukkeeper)
 // -GET a bukkeeper
-app.get("/api/bukkeeper/:email", getBukkeeper)
+    app.get("/api/bukkeeper/:email", getBukkeeper)
 // -UPDATE a bukkeeper
-app.patch("/api/bukkeeper/:email", updateBukkeeper)
+    app.patch("/api/bukkeeper/:email", updateBukkeeper)
 // -DELETE a bukkeeper
-app.delete("/api/bukkeeper/:email", deleteBukkeeper)
+    app.delete("/api/bukkeeper/:email", deleteBukkeeper)
 
 
 // catch-all endpoint

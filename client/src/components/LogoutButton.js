@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useAuth0 } from '@auth0/auth0-react';
 import Spectacles from './SpecticlesIcon';
+import { UserContext } from './UserContext';
 
 
 
-const LogoutButton = ({ loggedInUser }) => {
+const LogoutButton = () => {
     const {logout } = useAuth0();
+    const { loggedInUser } = useContext(UserContext);
     return (
         <Container>
             <Copy>
@@ -17,7 +19,7 @@ const LogoutButton = ({ loggedInUser }) => {
                 Now, enter <CopyBold>búkshelf</CopyBold>. A digital space to support, share and catalogue our analogue obsession.
             </Copy>
 
-            <Copy>So, <CopyBold>búkkeeper,</CopyBold> what are you cataloguing today?</Copy>
+            <Copy>So, <CopyBold>búkkeeper {loggedInUser.fullName},</CopyBold> what are you cataloguing today?</Copy>
             <ButtonWrapper>
                 <Button onClick={() => logout()}>
                     <Spectacles /><ButtonText>logout</ButtonText>

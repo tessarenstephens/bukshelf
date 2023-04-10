@@ -1,17 +1,21 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { useAuth0 } from '@auth0/auth0-react';
 import { UserContext } from './UserContext';
 
 const Catalogue = () => {
-    const { user, isAuthenticated } = useAuth0();
-    const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+    const { loggedInUser } = useContext(UserContext);
 
     return (
 
         <Container>
-            
-            
+            <h1>{loggedInUser.fullName}</h1>
+            <p>{loggedInUser.buks.map((buk) => {
+                return (
+                    <div key={`buk-${buk.title}`}>
+                        TITLE:{buk.title}  AUTHOR:{buk.author}
+                    </div>
+                )
+            })}</p>
         </Container>
 
     )

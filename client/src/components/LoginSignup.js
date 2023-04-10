@@ -6,8 +6,7 @@ import Spectacles from './SpecticlesIcon';
 
 const LoginSignup = () => {
     const { loginWithRedirect, isAuthenticated, user } = useAuth0();
-    // console.log("IS AUTHENTICATED:", isAuthenticated);
-    // console.log("USER:", user);
+
     return (
         
         !isAuthenticated && (

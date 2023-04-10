@@ -1,27 +1,22 @@
 import React, { useContext } from 'react';
-import styled from'styled-components';
-import { useAuth0 } from '@auth0/auth0-react';
 import { UserContext } from './UserContext';
+import styled from'styled-components';
 import Catalogue from './Catalogue';
 import profileIcon from '../assets/spectacles-icon.png';
 import LoadingState from './LoadingState';
 
 const Profile = () => {
-    const {user, isAuthenticated} = useAuth0();
-    const {loggedInUser, setLoggedInUser} = useContext(UserContext);
-
+    const { loggedInUser } = useContext(UserContext);
+    console.log(loggedInUser);
     return (
-        
-        <UserContext.Provider value={loggedInUser}>
         <Container>
-        {!loggedInUser.fullName && !isAuthenticated && <LoadingState />} 
+        { !loggedInUser && <LoadingState /> } 
 
-        {loggedInUser && isAuthenticated && (
+        { loggedInUser && (
             <>
                 <ProfileDiv>
                     <ProfileImage src={profileIcon} alt="profile icon"/>
                     <Hey>Hey, búkkeeper! {loggedInUser.fullName}</Hey>
-                    <Hey>{loggedInUser.email}</Hey>
                 </ProfileDiv>
 
                 <DashboardDiv>
@@ -31,9 +26,8 @@ const Profile = () => {
             </>
         )}
         </Container>
-        </UserContext.Provider>
     )
-}
+};
 
 const Container = styled.div`
     width: 100%;

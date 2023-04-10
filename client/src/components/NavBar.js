@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Logo from "./Logo.js";
 import Spectacles from "./SpecticlesIcon.js";
 import { useAuth0 } from '@auth0/auth0-react';
-
+import { UserContext } from './UserContext.js';
 
 const NavBar = () => {
-    const { isAuthenticated, user } = useAuth0();
-
+    const { isAuthenticated } = useAuth0();
+    const { loggedInUser } = useContext(UserContext);
     return (
         <NavBarContainer>
             <Element to='/' ><Logo /></Element>
-            {isAuthenticated &&
+
+            {loggedInUser &&
             <Element to='/profile'><Spectacles /></Element>}
-            {!isAuthenticated &&
+
+            {!isAuthenticated && !loggedInUser &&
             <Element ><Spectacles /></Element>}
         </NavBarContainer>
     )
