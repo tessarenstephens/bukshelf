@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { useState } from'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from './UserContext';
 import { useAuth0 } from '@auth0/auth0-react';
 import logoB from '../assets/bukshelf-logo.png';
 import buksIcon from '../assets/buks-noline.png';
@@ -14,7 +14,7 @@ const Registration = () => {
     const navigate = useNavigate();
 
     const { user, isAuthenticated } = useAuth0();
-    const [formReceived, setFormReceived] = useState(false);
+    const { setLoggedInUser } = useContext(UserContext);
 
     const [formResult, setFormResult] = useState({
         fullName: "",
@@ -32,6 +32,8 @@ const Registration = () => {
         notes: "",
     })
 
+    const [genre, setGenre] = useState("")
+
     const handleFormChange = (event) => {
         const { name } = event.target;
         if (name === 'fullName') {
@@ -44,11 +46,8 @@ const Registration = () => {
             setBuk({...buk, author: event.target.value})
         } else if (name === 'currentlyReading') {
             setBuk({...buk, currentlyReading: !buk.currentlyReading})
-
-        } else if (name === 'genres') {
-            console.log("HELLO GENRES")
-            // setBuk({...buk, genre: event.target.value})
-
+        } else if (name === 'genre') {
+            setGenre({ genre: event.target.value })
         } else if (name === 'type') {
             setBuk({...buk, type: event.target.value})
         } else if (name === 'condition') {
@@ -73,11 +72,10 @@ const Registration = () => {
             }
         }
         setBuk({...buk, genres: bukGenres})
-        console.log("BUKGENRES:", bukGenres);
     }
 
 
-// SUBMIT REGISTRATION FORM
+// POST - SUBMIT REGISTRATION FORM
     const handleRegistration = (event) => {
         event.preventDefault();
         console.log({...formResult, buks:[buk]})
@@ -88,22 +86,22 @@ const Registration = () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify( {...formResult, buks:[buk]} )
-        }) .then((response) => response.json())
-        .then((data) => {
-            if (data.status === 201) {
-                setFormReceived(true);
-                setFormResult({ ...formResult});
-                navigate(`/profile`);
-            }
-    })}
+            })  .then((response) => response.json())
+                .then((data) => {
+                    console.log("POST REGISTRATION:", data)
+                if (data.status === 201) {
+                    setLoggedInUser(data.data);
+                    navigate(`/`);
+                }
+        })
+    }
 
-
+console.log(user);
     return (
         <Container>
 
-            <Header>Hey, you're almost an official búkkeeper! <SizeDiv><Spectacles /></SizeDiv></Header>
-            <Copy>You're almost there...</Copy>
-            <Copy>just complete our short registration form to get cataloguing.</Copy>
+            <Header>Hey, {`${user.nickname}`}, you're almost an official búkkeeper! <SizeDiv><Spectacles /></SizeDiv></Header>
+            <Copy>Complete our short registration form to get cataloguing.</Copy>
 
             <FormDiv>
                 <FormColumn>
@@ -123,17 +121,20 @@ const Registration = () => {
                     <ImgBanner src= {Books}/>
 
                     <InputDiv>
-                        <Label>What búk are you currently reading?</Label>
+
+{/* CURRENTLY READING CHECKBOX */}
+
+                        <Label>What búk are you Currently Reading?</Label>
+                        <Checkbox type="checkbox" name="currentlyReading" checked={buk.currentlyReading} onChange={handleFormChange} required={true}></Checkbox>
+
                         <Label2>Title</Label2>
                         <InputField type="text" name="title" placeholder="Zen and the Art of Motorcycle Maintenance" onChange={handleFormChange} required={true}></InputField>
                         <Label2>Author</Label2>
                         <InputField type="text" name="author" placeholder="Robert M. Pirsig" onChange={handleFormChange} required={true}></InputField>
-{/* CURRENTLY READING CHECKBOX */}
-                        <Label2>Currently Reading</Label2>
-                        <InputField type="checkbox" name="currentlyReading" checked={buk.currentlyReading} onChange={handleFormChange} required={true}></InputField>
 {/* GENRE CHECKBOXES */}
                         <fieldset>
-                            <legend>Select the genres apply to the buk you're currently reading.</legend>
+                            <GenreLabel>Which genres does your búk belong to?</GenreLabel>
+                            <GenreSelectDiv>
                             { GENRES.map((genre) => {
                                 return (
                                 <div key={`genre-${genre}`}>
@@ -142,10 +143,10 @@ const Registration = () => {
                                 </div>
                                 )
                             })}
+                            <GenreTextInput type="text" name="genre" placeholder="another genre" onChange={handleFormChange} required={false} />
+                            </GenreSelectDiv>
                         </fieldset>
 
-                            {/* <Label2>Genre</Label2>
-                            <InputField type="checkbox" name="genre" placeholder="Philosophical Fiction, Autobiography" onChange={(event) => handleFormChange(event)} required={true}></InputField> */}
 {/* CHANGE TO RADIO INPUTS - HARDCOVER : PAPERBACK */}
                         <Label2>Type</Label2>
                         <InputField type="text" name="type" placeholder="paperback novel" onChange={(event) => handleFormChange(event)} required={true}></InputField>
@@ -277,13 +278,39 @@ const Label2 = styled.label`
     padding: 5px 0px 0px 10px;
 `;
 
+const Checkbox = styled.input`
+    display: none;
+`;
+
+const GenreLabel = styled.label`    
+    font-weight: bolder;
+    text-transform: uppercase;
+    font-size: 9pt;
+    padding: 5px 0px 0px 10px;
+`;
+
+const GenreSelectDiv = styled.div`
+    column-count: 2;
+    padding: 5px 0px 10px 15px;
+    text-transform: uppercase;
+    font-size: 10pt;
+    column-gap: 20px;
+`;
+
+const GenreTextInput = styled.input`
+    text-transform: uppercase;
+    font-size: 9pt;
+    padding: 5px;
+    width: 100%;
+    margin-left: 18px;
+`;
+
 const Button = styled.button`
     width: 100%;
     height: 50px;
     border-radius: 7px;
     margin: 20px 0px 15px;
     color: var(--paper);
-
 `;
 
 const IMG = styled.img`

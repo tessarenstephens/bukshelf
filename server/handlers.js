@@ -1,6 +1,4 @@
-// EXAMPLES
-// https://github.com/tessarenstephens/project-slingair/blob/master/backend/handlers.js
-
+"use strict";
 
 const { MongoClient } = require("mongodb");
 require("dotenv").config({path: "../.env"});
@@ -12,16 +10,13 @@ const options = {
     useUnifiedTopology: true,
 };
 
-const client = new MongoClient(MONGO_URI, options);
-const db = client.db("BUKSHELF");
-const bukkeepers = db.collection("bukkeepers");
-
-
 // CREATE a bukkeeper
 const addBukkeeper = async (request, response) => {
     const { fullName, email, buks } = request.body;
+    const client = new MongoClient(MONGO_URI, options);
     try {
         await client.connect();
+        const db = client.db("BUKSHELF");
 
         const newBukkeeper = {
             fullName: fullName,
@@ -29,17 +24,17 @@ const addBukkeeper = async (request, response) => {
             buks: buks,
         }
 
-        const newBukkeeperResult = await bukkeepers.insertOne(newBukkeeper);
+        const newBukkeeperResult = await db.collection("bukkeepers").insertOne(newBukkeeper);
         if (newBukkeeperResult.insertedCount === 0) {
             return response.status(502).json({
                 status: 502,
                 message: "Database failed to add new bukkeeper.",
-            })
-        } return response.status(201).json({
-            status: 201,
-            data: newBukkeeper,
-            message: "New bukkeeper created successfully.",
-        })    
+                })
+            } return response.status(201).json({
+                status: 201,
+                data: newBukkeeper,
+                message: "New bukkeeper created successfully.",
+                })    
     } catch (error) {
         return response.status(500).json({
             error: error.message,
@@ -51,9 +46,11 @@ const addBukkeeper = async (request, response) => {
 
 // GET all bukkeepers
 const getBukkeepers = async (request, response) => {
+    const client = new MongoClient(MONGO_URI, options);
     try {
         await client.connect();
-        const result = await bukkeepers.find().toArray();
+        const db = client.db("BUKSHELF");
+        const result = await db.collection("bukkeepers").find().toArray();
         return response.status(200).json({
             status: 200,
             data: result,
@@ -71,21 +68,31 @@ const getBukkeepers = async (request, response) => {
 };
 
 
-// GET a bukkeeper
+// GET a bukkeeper - called in UserContext
 const getBukkeeper = async (request, response) => {
     const { email } = request.params;
+    const client = new MongoClient(MONGO_URI, options);
     try {
         await client.connect();
-        const result = await bukkeepers.findOne({ email });
-        return response.status(200).json({
-            status: 200,
-            data: result,
-            message: "GET a single bukkeeper",
-        });
-    }
-    catch (error) {
+        const db = client.db("BUKSHELF");
+        const result = await db.collection("bukkeepers").findOne({ email });
+        console.log(result);
+        if (result) {
+            return response.status(200).json({
+                status: 200,
+                data: result,
+                message: "GET a single bukkeeper",
+            })
+        } else {
+            return response.status(404).json({
+                status: 404,
+                data: result,
+                message: "bukkeeper not found, must register",
+            })
+        }
+    } catch (error) {
         return response.status(500).json({
-            error: error.message,
+            error: error,
             message: "GET bukkeeper failed",
         });
     }
@@ -98,9 +105,11 @@ const getBukkeeper = async (request, response) => {
 // UPDATE a bukkeeper
 const updateBukkeeper = async (request, response) => {
     const { email } = request.body;
+    const client = new MongoClient(MONGO_URI, options);
     try {
         await client.connect();
-        const result = await bukkeepers.updateOne({ email }, { $set: { fullName, bukkeeperName, buks  } });
+        const db = client.db("BUKSHELF");
+        const result = await db.collection("bukkeepers").updateOne({ email }, { $set: { fullName, bukkeeperName, buks  } });
         return response.status(200).json({
             status: 200,
             data: result,
@@ -121,9 +130,11 @@ const updateBukkeeper = async (request, response) => {
 // DELETE a bukkeeper
 const deleteBukkeeper = async (request, response) => {
     const { email } = request.body;
+    const client = new MongoClient(MONGO_URI, options);
     try {
         await client.connect();
-        const result = await bukkeepers.deleteOne({ email });
+        const db = client.db("BUKSHELF");
+        const result = await db.collection("bukkeepers").deleteOne({ email });
         return response.status(200).json({
             status: 200,
             data: result,
@@ -141,12 +152,15 @@ const deleteBukkeeper = async (request, response) => {
 }
 
 
-// CHECK for existing bukkeeper @ LANDING PAGE
+// CHECK for existing bukkeeper - called in Landing
 const verifyBukkeeper = async (request, response) => {
     const { email } = request.query;
+    const client = new MongoClient(MONGO_URI, options);
     try {
         await client.connect();
-        const bukkeeper = await bukkeepers.findOne({ email });
+        const db = client.db("BUKSHELF");
+        const bukkeeper = await db.collection("bukkeepers").findOne({ email });
+        console.log(bukkeeper);
         if (bukkeeper) {
             return response.status(200).json({
                 status: 200,
@@ -154,13 +168,14 @@ const verifyBukkeeper = async (request, response) => {
                 bukkeeper: bukkeeper,
             })
         } else {
-            return response.status(200).json({
-                status: 200,
+            return response.status(404).json({
+                status: 404,
                 inDB: false,
                 bukkeeper: "verifyBukkeeper: User not registered",
             })
         }
     } catch (error) {
+        console.log(error);
         return response.status(500).json({
             status: 500,
             alert: "verifyBukkeeper: Database failed.",
