@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { useAuth0 } from '@auth0/auth0-react';
 import logoB from '../assets/bukshelf-logo.png';
-import buksIcon from '../assets/buks-noline.png';
-import Spectacles from './SpecticlesIcon';
+import BuksIcon from '../assets/buks-noline.png';
+import Spectacles from './SpectaclesIcon';
 import Books from '../assets/books-side.jpg';
 import { GENRES } from '../constants';
 
@@ -13,11 +13,12 @@ import { GENRES } from '../constants';
 const Registration = () => {
     const navigate = useNavigate();
 
-    const { user, isAuthenticated } = useAuth0();
+    const { user } = useAuth0();
     const { setLoggedInUser } = useContext(UserContext);
 
     const [formResult, setFormResult] = useState({
         fullName: "",
+        userName: "",
         email: "",
         buks: [],
     });
@@ -34,26 +35,29 @@ const Registration = () => {
 
     const [genre, setGenre] = useState("")
 
+    // FORM INPUT HANDLER
     const handleFormChange = (event) => {
         const { name } = event.target;
         if (name === 'fullName') {
             setFormResult({ ...formResult, fullName: event.target.value })
+        } else if (name === 'userName') {
+            setFormResult({ ...formResult, userName: event.target.value })
         } else if (name === 'email') {
             setFormResult({ ...formResult, email: event.target.value })
         } else if (name === 'title') {
-            setBuk({...buk, title: event.target.value})
+            setBuk({...buk, title: event.target.value })
         } else if (name === 'author') {
-            setBuk({...buk, author: event.target.value})
+            setBuk({...buk, author: event.target.value })
         } else if (name === 'currentlyReading') {
-            setBuk({...buk, currentlyReading: !buk.currentlyReading})
+            setBuk({...buk, currentlyReading: !buk.currentlyReading })
         } else if (name === 'genre') {
-            setGenre({ genre: event.target.value })
+            setGenre( event.target.value )
         } else if (name === 'type') {
-            setBuk({...buk, type: event.target.value})
+            setBuk({...buk, type: event.target.value })
         } else if (name === 'condition') {
-            setBuk({...buk, condition: event.target.value})
+            setBuk({...buk, condition: event.target.value })
         } else if (name === 'notes') {
-            setBuk({...buk, notes: event.target.value})
+            setBuk({...buk, notes: event.target.value })
         }
     }
 
@@ -71,24 +75,24 @@ const Registration = () => {
             bukGenres.splice(unChecked, 1)
             }
         }
-        setBuk({...buk, genres: bukGenres})
-    }
+        setBuk({...buk, genres:bukGenres})
+    };
 
 
 // POST - SUBMIT REGISTRATION FORM
     const handleRegistration = (event) => {
         event.preventDefault();
+        // const bukCopy = {...buk};
         console.log({...formResult, buks:[buk]})
 
-        fetch("/api/bukkeeper", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify( {...formResult, buks:[buk]} )
-            })  .then((response) => response.json())
+        fetch("/api/bukkeeper", { 
+            method: "POST", 
+            headers:{"Content-Type": "application/json"},
+            body:JSON.stringify({...formResult, buks:[buk]})
+            })
+                .then((response) => response.json())
                 .then((data) => {
-                    console.log("POST REGISTRATION:", data)
+                    console.log("BUKKEEPER FORM:", data)
                 if (data.status === 201) {
                     setLoggedInUser(data.data);
                     navigate(`/`);
@@ -96,12 +100,12 @@ const Registration = () => {
         })
     }
 
-console.log(user);
+
     return (
         <Container>
-
-            <Header>Hey, {`${user.nickname}`}, you're almost an official búkkeeper! <SizeDiv><Spectacles /></SizeDiv></Header>
-            <Copy>Complete our short registration form to get cataloguing.</Copy>
+            <Header>Hey, future búkkeeper! <SizeDiv><Spectacles /></SizeDiv></Header>
+            <Copy>You're almost there...</Copy>
+            <Copy>just complete our short registration form to get cataloguing.</Copy>
 
             <FormDiv>
                 <FormColumn>
@@ -109,21 +113,22 @@ console.log(user);
                     <InputDiv>
                         <Label>full name</Label>
                         <Description></Description>
-                        <InputField type="text" name="fullName" placeholder="Matilda Honey" onChange={(event) => handleFormChange(event)} required={true}></InputField>
+                        <InputField type="text" name="fullName" placeholder="Matilda Honey" onChange={handleFormChange} required={true}></InputField>
                     </InputDiv>
-
+                    <InputDiv>
+                        <Label>búkkeeper username</Label>
+                        <Description></Description>
+                        <InputField type="text" name="userName" placeholder="Matilda_88" onChange={handleFormChange} required={true}></InputField>
+                    </InputDiv>
                     <InputDiv>
                         <Label>email</Label>
                         <Description></Description>
-                        <InputField type="text" name="email" placeholder="matilda_bookworm@bukshelf.ca" onChange={(event) => handleFormChange(event)} required={true}></InputField>
+                        <InputField type="text" name="email" placeholder="matilda_bookworm@bukshelf.ca" onChange={handleFormChange} required={true}></InputField>
                     </InputDiv>
 
                     <ImgBanner src= {Books}/>
 
                     <InputDiv>
-
-{/* CURRENTLY READING CHECKBOX */}
-
                         <Label>What búk are you Currently Reading?</Label>
                         <Checkbox type="checkbox" name="currentlyReading" checked={buk.currentlyReading} onChange={handleFormChange} required={true}></Checkbox>
 
@@ -135,27 +140,35 @@ console.log(user);
                         <fieldset>
                             <GenreLabel>Which genres does your búk belong to?</GenreLabel>
                             <GenreSelectDiv>
-                            { GENRES.map((genre) => {
-                                return (
-                                <div key={`genre-${genre}`}>
-                                    <input type='checkbox' name={`genre-${genre}`} value={genre} onChange={handleGenreChange}/> 
-                                    { genre }
-                                </div>
-                                )
-                            })}
-                            <GenreTextInput type="text" name="genre" placeholder="another genre" onChange={handleFormChange} required={false} />
+                                { GENRES.map((genre) => {
+                                    return (
+                                        <div key={`genre-${genre}`}>
+                                            <input type='checkbox' name={`genre-${genre}`} value={genre} onChange={handleGenreChange}/> 
+                                            { genre }
+                                        </div>
+                                    )
+                                })}
+                                <GenreTextInput type="text" name="genre" placeholder="another genre" onChange={handleGenreChange} required={false} />
                             </GenreSelectDiv>
                         </fieldset>
 
 {/* CHANGE TO RADIO INPUTS - HARDCOVER : PAPERBACK */}
-                        <Label2>Type</Label2>
-                        <InputField type="text" name="type" placeholder="paperback novel" onChange={(event) => handleFormChange(event)} required={true}></InputField>
+                            <Label2>Type</Label2>
+                            <TypeDiv>
+                                <InputField type="radio" id="hardcover" name="type" value="Hardcover" onClick={handleFormChange}></InputField>
+                                <RadioLabel HTMLfor="hardcover">Hardcover</RadioLabel>
+                            </TypeDiv>
+                            <TypeDiv>
+                                <InputField type="radio" id="paperback" name="type" value="Paperback" onClick={handleFormChange}></InputField>
+                                <RadioLabel HTMLfor="paperback">Paperback</RadioLabel>
+                            </TypeDiv> 
+
                         <Label2>Condition</Label2>
-                        <InputField type="text" name="condition" placeholder="fairly delicate, but sturdy & deckle edged" onChange={(event) => handleFormChange(event)} required={true}></InputField>
+                        <InputField type="text" name="condition" placeholder="fairly delicate, but sturdy & deckle edged" onChange={handleFormChange} required={true}></InputField>
                         <Label2>Thoughts</Label2>
-                        <InputTextArea type="textarea" name="notes" placeholder="synopsys, reviews, opinions, ISBN, print year, publication year, general notes, or whatever your heart desires can go here!" onChange={(event) => handleFormChange(event)} required={false}></InputTextArea>
+                        <InputTextArea type="textarea" name="notes" placeholder="synopsys, reviews, opinions, ISBN, print year, publication year, general notes, or whatever your heart desires can go here!" onChange={handleFormChange} required={false}></InputTextArea>
                     </InputDiv>
-                    <Button onClick={(event) => {handleRegistration(event)}}><IMG src={`${buksIcon}`} /> Create catalogue</Button>
+                    <Button onClick={handleRegistration}><IMG src={`${BuksIcon}`} /> Create catalogue</Button>
                 </FormColumn>
             </FormDiv>
             <Footer>
@@ -275,11 +288,23 @@ const Label2 = styled.label`
     font-weight: bolder;
     text-transform: uppercase;
     font-size: 9pt;
-    padding: 5px 0px 0px 10px;
+    padding: 10px 0px 0px 10px;
 `;
 
 const Checkbox = styled.input`
     display: none;
+`;
+
+const TypeDiv = styled.div`
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    font-size: 10pt;
+    padding-left: 15px;
+`;
+
+const RadioLabel = styled.label`
+    margin-bottom: -5px;
 `;
 
 const GenreLabel = styled.label`    

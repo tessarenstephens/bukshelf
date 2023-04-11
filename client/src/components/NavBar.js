@@ -1,23 +1,31 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
-import Logo from "./Logo.js";
-import Spectacles from "./SpecticlesIcon.js";
 import { useAuth0 } from '@auth0/auth0-react';
 import { UserContext } from './UserContext.js';
+import { NavLink } from 'react-router-dom';
+import Logo from "./Logo.js";
+import Spectacles from "./SpectaclesIcon.js";
+import BuksIcon from './BuksIcon.js';
+
 
 const NavBar = () => {
     const { isAuthenticated } = useAuth0();
     const { loggedInUser } = useContext(UserContext);
     return (
         <NavBarContainer>
-            <Element to='/' ><Logo /></Element>
+            <LogoDiv to='/' ><Logo /></LogoDiv>
 
-            {loggedInUser &&
-            <Element to='/profile'><Spectacles /></Element>}
+            {loggedInUser && (
+                <ElementContainer>
+                    <CatalogueDiv to='/catalogue'>
+                        <BuksIcon />
+                    </CatalogueDiv>
+                    <SpectaclesDiv to='/profile'>
+                        <Spectacles />
+                    </SpectaclesDiv>
+                </ElementContainer>
+            )}
 
-            {!isAuthenticated && !loggedInUser &&
-            <Element ><Spectacles /></Element>}
         </NavBarContainer>
     )
 };
@@ -28,14 +36,34 @@ const NavBarContainer = styled.div`
     align-items: center;
     background-color: black;
     width: 100%;
-    min-width: 300px;
+    min-width: 350px;
     height: 15%;
     min-height: 90px;
 `;
 
-const Element = styled(NavLink)`
+const ElementContainer = styled.div`
+    display: flex;
+    align-items: flex-end;
+    width: fit-content;
+`;
+
+const LogoDiv = styled(NavLink)`
     padding: 25px 40px;
-    cursor: pointer;
+    text-decoration: none;
+    cursor: nw-resize;
+`;
+
+const CatalogueDiv = styled(NavLink)`
+    padding: 25px 20px;
+    text-decoration: none;
+    cursor: ne-resize;
+`;
+
+const SpectaclesDiv = styled(NavLink)`
+    padding: 25px 40px;
+    margin-bottom: 4px;
+    text-decoration: none;
+    cursor: ne-resize;
 `;
 
 export default NavBar;
