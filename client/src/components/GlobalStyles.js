@@ -33,6 +33,7 @@ time, mark, audio, video {
     font-family: var(--helvetica);
     color: #16120a;
     letter-spacing: 1pt;
+    cursor: text;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,

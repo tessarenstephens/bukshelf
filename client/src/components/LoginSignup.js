@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from'styled-components';
 import { useAuth0 } from '@auth0/auth0-react';
-import Spectacles from './SpecticlesIcon';
+import Spectacles from './SpectaclesIcon';
+import bookShelf from '../assets/bookShelf.jpg';
 
 
 const LoginSignup = () => {
@@ -9,7 +10,7 @@ const LoginSignup = () => {
 
     return (
         
-        !isAuthenticated && (
+        !isAuthenticated && !user && (
             <Container>
                 <Copy>
                     How many of us really know the complete inventory of our bookshelves? From genres, titles and authors to whether you’ve lent it out to a friend, there is a lot to keep track of. 
@@ -26,7 +27,7 @@ const LoginSignup = () => {
                         <Spectacles /><ButtonText>sign in or sign up</ButtonText>
                     </Button>
                 </ButtonWrapper>
-
+                <Div src={`${bookShelf}`}/>
             </Container>
         ))
 }
@@ -52,6 +53,12 @@ const CopyBold = styled.span`
     font-size: 16pt;
 `;
 
+const Div = styled.img`
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+`;
+
 const ButtonWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -69,6 +76,7 @@ const Button = styled.button`
     margin-top: -50px;
     border-radius: 3em;
     background-color: transparent;
+    cursor: ne-resize;
     &:hover {
         scale: 1.2;
     }

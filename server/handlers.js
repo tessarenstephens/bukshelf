@@ -12,7 +12,7 @@ const options = {
 
 // CREATE a bukkeeper
 const addBukkeeper = async (request, response) => {
-    const { fullName, email, buks } = request.body;
+    const { fullName, userName, email, buks } = request.body;
     const client = new MongoClient(MONGO_URI, options);
     try {
         await client.connect();
@@ -20,6 +20,7 @@ const addBukkeeper = async (request, response) => {
 
         const newBukkeeper = {
             fullName: fullName,
+            userName: userName,
             email: email,
             buks: buks,
         }
