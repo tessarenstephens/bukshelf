@@ -57,7 +57,7 @@ const deleteBuk = async (request, response) => {
     try {
         await client.connect();
         const db = client.db("BUKSHELF");
-        const result = await db.collection("bukkeepers").deleteOne({ title });
+        const result = await db.collection("bukkeepers").findOneAndDelete({email:email}, {title:title});
         return response.status(200).json({
             status: 200,
             data: result,

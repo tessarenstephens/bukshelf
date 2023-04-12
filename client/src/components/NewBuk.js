@@ -279,24 +279,25 @@ column-gap: 20px;
 `;
 
 const GenreTextInput = styled.input`
-text-transform: uppercase;
-font-size: 9pt;
-padding: 5px;
-width: 100%;
-margin-left: 18px;
+    text-transform: uppercase;
+    font-size: 9pt;
+    padding: 5px;
+    width: 100%;
+    margin-left: 18px;
 `;
 
 const Button = styled.button`
-width: 100%;
-height: 50px;
-border-radius: 7px;
-margin: 20px 0px 15px;
-color: var(--paper);
+    width: 100%;
+    height: 50px;
+    border-radius: 7px;
+    margin: 20px 0px 15px;
+    color: var(--paper);
+    cursor: se-resize;
 `;
 
 const IMG = styled.img`
-width: 18px;
-margin-bottom: -2px;
+    width: 18px;
+    margin-bottom: -2px;
 `;
 
 const Footer = styled.div`

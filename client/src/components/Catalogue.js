@@ -5,20 +5,23 @@ import LoadingState from './LoadingState';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const Catalogue = () => {
-    const { loggedInUser } = useContext(UserContext);
+    const { loggedInUser, buk } = useContext(UserContext);
+
     const navigate = useNavigate();
-    const [refresh, setRefresh] = useState(false);
 
     const handleDeleteBuk = (event) => {
         event.preventDefault();
-        const result = fetch(`/api/bukkeeper/${loggedInUser.email}/${loggedInUser.buks.buk.title}`, { method: 'DELETE' })
-        .then((response) => response.json())
-        .then(() => {
-            if (result.status === 'success') {
-            setRefresh(true);
-            navigate('/catalogue');
-        }})
-        .catch((err) => console.log(err));
+        const result = fetch(`/api/bukkeeper/${loggedInUser.email}/${buk}`, { method: 'DELETE', headers:{"Content-Type": "application/json"},
+        body:JSON.stringify({...buk}) 
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("RESULT", result)
+                if (data.status === 200) {
+                    console.log(data);
+                }
+            })
+            .catch((err) => console.log(err));       
     }
 
     return (
@@ -29,7 +32,7 @@ const Catalogue = () => {
         <CopyBold>What are you cataloguing today?</CopyBold>
         <ListContainer>
             <Header>
-                <h1>BÚKLIST</h1>
+                <Heading>BÚKLIST</Heading>
                 <NewBukDiv to='/:bukkeeper/new-buk'>
                         <AddNew>add new búk</AddNew>
                 </NewBukDiv>
@@ -103,15 +106,21 @@ const ListContainer = styled.div`
     border-radius: 9px;
 `;
 
+const Heading = styled.h1`
+    color: var(--paper);
+    margin-left: 40px;
+`;
+
 const AddNew = styled.h2`
     color: var(--paper);
+    font-size: 10pt;
     cursor: ne-resize;
 `;
 
 const Header = styled.div`
     display: flex;
     text-transform: uppercase;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     font-weight: bolder;
     background-color: black;
@@ -124,14 +133,14 @@ const BuksContainer = styled.div`
     width: fit-content;
     display: flex;
     flex-wrap: wrap;
-    padding: 15px;
+    padding: 5px;
 `;
 
 const BukContainer = styled.div`
     display: flex;
     flex-direction: column;
     border: solid 5px black;
-    border-radius: 11px;
+    border-radius: 1em;
 `;
 
 const Label = styled.div`
@@ -162,7 +171,6 @@ const BukDetails = styled.div`
     display: flex;
     flex-direction: column;
     text-transform: uppercase;
-
 `;
 
 const NewBukDiv = styled(NavLink)`

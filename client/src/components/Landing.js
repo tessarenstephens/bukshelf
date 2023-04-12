@@ -43,7 +43,7 @@ const Landing = () => {
     console.log("user",user, "/ loading:",loading, "/ noUser:",noUser, "/ mustRegister:",mustRegister)
 
 
-if ( loading === true && noUser === false && mustRegister === true ) {
+if (loading === true && noUser === false && mustRegister === true) {
     return <LoadingState /> 
 }
 
@@ -51,9 +51,13 @@ if (loading === false && noUser === true && mustRegister === true && loggedInUse
     return <LoginSignup />
 };
 
+if (loggedInUser && user && noUser === false && mustRegister === false) {
+    return <BukkeeperLanding />
+}
+
     return (
         <Container>
-            {loggedInUser && <BukkeeperLanding />}
+            {<LoginSignup />}
         </Container>
     )
 };
