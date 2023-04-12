@@ -14,6 +14,11 @@ const {
     updateBukkeeper,
 } = require("./handlers");
 
+const {
+    addBuk,
+} = require("./bukHandlers");
+
+
 // express app
 const app = express()
 // middleware
@@ -24,7 +29,7 @@ const app = express()
 
 
 
-// api endpoints
+// api BUKKEEPER endpoints
 // -CREATE a bukkeeper
     app.post("/api/bukkeeper", addBukkeeper)
 // -GET all bukkeepers
@@ -37,6 +42,10 @@ const app = express()
     app.patch("/api/bukkeeper/:email", updateBukkeeper)
 // -DELETE a bukkeeper
     app.delete("/api/bukkeeper/:email", deleteBukkeeper)
+
+// api BUK endpoints
+// -CREATE a buk
+    app.post("/api/bukkeeper/buk", addBuk)
 
 
 // catch-all endpoint

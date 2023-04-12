@@ -62,13 +62,13 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 50px;
 `;
 
 const CopyBold = styled.span`
     line-height: 1.4;
     font-weight: bold;
     font-size: 16pt;
+    margin: 30px 0px 40px;
 `;
 
 const ListContainer = styled.div`

@@ -27,7 +27,17 @@ const addBuk = async (request, response) => {
             notes: notes,
         }
 
-        const newBukResult = await db.collection("bukkeepers").insertOne(newBuk);
+        const newBukResult = await db.collection("bukkeepers").buks.insertOne(newBuk);
+        if (newBukResult.insertedCount === 0) {
+            return response.status(502).json({
+                status: 502,
+                message: "Database failed to add new buk.",
+                })
+            } return response.status(201).json({
+                status: 201,
+                data: newBuk,
+                message: "New buk created successfully.",
+                })    
     } catch (error) {
         return response.status(500).json({
             error: error.message,
@@ -36,3 +46,7 @@ const addBuk = async (request, response) => {
         client.close();
     }
 }
+
+module.exports = {
+    addBuk,
+};

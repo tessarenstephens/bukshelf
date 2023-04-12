@@ -16,18 +16,18 @@ const Profile = () => {
         { loggedInUser && (
             <Container>
                 <ProfileImage src={profileIcon} alt="profile icon"/>
-                <Header>CURRENTLY READING</Header>
+                <Header>Currently Reading</Header>
                 <div>
                     {loggedInUser.buks.map(buk => {
                         if (buk.currentlyReading === true) {
                             return (
                                 <CurrentBukDiv>
-                                <BukDetails>
-                                    <CopyBold>{`${buk.title}`}</CopyBold>
-                                </BukDetails>
-                                <BukDetails>
-                                    {`${buk.author}`}
-                                </BukDetails>
+                                    <BukDetails>
+                                        <CopyBold>{`${buk.title}`}</CopyBold>
+                                    </BukDetails>
+                                    <BukDetails>
+                                        {`${buk.author}`}
+                                    </BukDetails>
                                 </CurrentBukDiv>
                             )
                         }
@@ -43,7 +43,7 @@ const Profile = () => {
         </Container>
         )}
         </>
-        )
+    )
 };
 
 const Container = styled.div`

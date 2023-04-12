@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import LoadingState from './LoadingState';
 import bookShelf from '../assets/bookShelf.jpg';
 import profileIcon from '../assets/Spectacles-Icon.png';
-import Spectacles from "./SpectaclesIcon.js";
+import Spectacles from './SpectaclesIcon';
 import BuksIcon from './BuksIcon.js';
 import { UserContext } from './UserContext';
 
@@ -150,4 +150,6 @@ const ButtonText = styled.div`
     color: var(--paper);
     cursor: pointer;
 `;
+
+
 export default BukkeeperLanding;
