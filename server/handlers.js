@@ -17,14 +17,12 @@ const addBukkeeper = async (request, response) => {
     try {
         await client.connect();
         const db = client.db("BUKSHELF");
-
         const newBukkeeper = {
             fullName: fullName,
             userName: userName,
             email: email,
             buks: buks,
         }
-
         const newBukkeeperResult = await db.collection("bukkeepers").insertOne(newBukkeeper);
         if (newBukkeeperResult.insertedCount === 0) {
             return response.status(502).json({

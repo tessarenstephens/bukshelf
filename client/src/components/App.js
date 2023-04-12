@@ -7,7 +7,7 @@ import Registration from "./Registration";
 import Profile from "./Profile";
 import Catalogue from "./Catalogue";
 import NavBar from "./NavBar";
-
+import CreateNewBuk from "./NewBuk";
 
 const App = () => {
 
@@ -22,6 +22,7 @@ const App = () => {
                     <Route path="/register" element={ <Registration /> } />
                     <Route path="/profile" element={ <Profile /> } />
                     <Route path="/catalogue" element={ <Catalogue /> } />
+                    <Route path="/:bukkeeper/new-buk" element={ <CreateNewBuk /> } />
                 </Routes>
             </Container>
         </BrowserRouter>

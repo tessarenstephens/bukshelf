@@ -82,7 +82,6 @@ const Registration = () => {
 // POST - SUBMIT REGISTRATION FORM
     const handleRegistration = (event) => {
         event.preventDefault();
-        // const bukCopy = {...buk};
         console.log({...formResult, buks:[buk]})
 
         fetch("/api/bukkeeper", { 

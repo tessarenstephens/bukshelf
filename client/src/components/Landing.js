@@ -40,7 +40,7 @@ const Landing = () => {
         }; setLoading(false);
     }, [user])
 
-    console.log("loading:",loading, "/ noUser:",noUser, "/ mustRegister:",mustRegister)
+    console.log("user",user, "/ loading:",loading, "/ noUser:",noUser, "/ mustRegister:",mustRegister)
 
 
 if ( loading === true && noUser === false && mustRegister === true ) {
