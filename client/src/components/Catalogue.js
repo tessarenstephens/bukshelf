@@ -1,10 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { UserContext } from './UserContext';
 import LoadingState from './LoadingState';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Catalogue = () => {
     const { loggedInUser } = useContext(UserContext);
+    const navigate = useNavigate();
+    const [refresh, setRefresh] = useState(false);
+
+    const handleDeleteBuk = (event) => {
+        event.preventDefault();
+        const result = fetch(`/api/bukkeeper/${loggedInUser.email}/${loggedInUser.buks.buk.title}`, { method: 'DELETE' })
+        .then((response) => response.json())
+        .then(() => {
+            if (result.status === 'success') {
+            setRefresh(true);
+            navigate('/catalogue');
+        }})
+        .catch((err) => console.log(err));
+    }
+
     return (
         <>
         {!loggedInUser && <LoadingState />}
@@ -12,9 +28,12 @@ const Catalogue = () => {
         <Container>
         <CopyBold>What are you cataloguing today?</CopyBold>
         <ListContainer>
-            <Header>BÚKLIST</Header>
-
-            {/* <button onClick={handleNewBuk}>New Búk</button> */}
+            <Header>
+                <h1>BÚKLIST</h1>
+                <NewBukDiv to='/:bukkeeper/new-buk'>
+                        <AddNew>add new búk</AddNew>
+                </NewBukDiv>
+            </Header>
 
             <div>{loggedInUser.buks.map((buk) => {
                 return (
@@ -44,6 +63,9 @@ const Catalogue = () => {
                             <BukDiv>
                                 <BukDetails>{buk.notes}</BukDetails>
                             </BukDiv>
+                            <button onClick={handleDeleteBuk}>
+                                <AddNew>remove búk from catalogue</AddNew>
+                            </button>
                         </BukContainer>
                     </BuksContainer>
                 )
@@ -81,6 +103,11 @@ const ListContainer = styled.div`
     border-radius: 9px;
 `;
 
+const AddNew = styled.h2`
+    color: var(--paper);
+    cursor: ne-resize;
+`;
+
 const Header = styled.div`
     display: flex;
     text-transform: uppercase;
@@ -90,19 +117,21 @@ const Header = styled.div`
     background-color: black;
     color: var(--paper);
     width: 100%;
-    height: 100px;
+    height: 75px;
 `;
 
 const BuksContainer = styled.div`
-    display: grid;
+    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
     padding: 15px;
 `;
 
 const BukContainer = styled.div`
     display: flex;
     flex-direction: column;
-    border: solid 3px black;
-    border-radius: 9px;
+    border: solid 5px black;
+    border-radius: 11px;
 `;
 
 const Label = styled.div`
@@ -134,6 +163,10 @@ const BukDetails = styled.div`
     flex-direction: column;
     text-transform: uppercase;
 
+`;
+
+const NewBukDiv = styled(NavLink)`
+    text-decoration: none;
 `;
 
 export default Catalogue;

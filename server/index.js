@@ -16,6 +16,7 @@ const {
 
 const {
     addBuk,
+    deleteBuk,
 } = require("./bukHandlers");
 
 
@@ -45,8 +46,9 @@ const app = express()
 
 // api BUK endpoints
 // -CREATE a buk
-    app.post("/api/bukkeeper/buk", addBuk)
-
+    app.patch("/api/bukkeeper/buk/:email", addBuk)
+// -DELETE a buk
+    app.delete("/api/bukkeeper/:email/:title", deleteBuk)
 
 // catch-all endpoint
     app.get("*", (request, response) => {
